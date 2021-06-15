@@ -21,6 +21,16 @@
     border-radius: 1rem;
 }
 
+.delete{
+    display: inline;
+    color: red;
+   
+}
+
+.delete-button{
+    font-size: 1.2rem;
+}
+
 .login-input{
     display: flex;
     justify-content: center;
@@ -29,6 +39,23 @@
     border: .1rem solid  #613f75;
     border-radius: .2rem;
     width: 15rem;
+}
+
+.comment-btn{
+    background-color: #613f75;
+    padding: .5rem .9rem 2rem;
+    align-items: center;
+    border-radius: 1.5rem;
+}
+
+.login{
+    background-color: #613f75;
+    align-items: center;
+    border: none;
+}
+.login:hover{
+    background-color: #613f75;
+   
 }
 
 .input{
@@ -86,6 +113,15 @@
     padding: 2rem;
 }
 
+/* @media screen and (max-width: 450px) {
+  
+    
+} */
+@media screen and (min-width: 540px) {
+    .delete{
+        margin-left: 17rem;
+    }
+}
 
 @media screen and (min-width: 1400px) {
     .section-book {
@@ -101,10 +137,17 @@
     .section-book {
         margin-top: 6rem;
     }
+    .delete{
+        margin-left: 30rem;
+    }
+    
 }
 
-/* @media screen and (max-width: 450px) {
-    .section {
-        margin: 6rem auto;
+@media screen and (max-width: 450px) {
+    .section-book {
+        margin: 3rem auto;
     }
-} */
+      .delete{
+        margin-left: 9rem;
+    }
+}

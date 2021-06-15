@@ -84,6 +84,17 @@ const Api = {
       return error;
     }
   },
+  deleteComment: async (commentId) =>{
+    await Api.setAuthToken();
+    try {
+      const response = await axios.delete(`/comments/${commentId}`)
+      if (response && response.status === 204) {
+        return response
+      }
+    } catch (error) {
+      return error;
+    }
+  },
   logOut: async () => {
     await Api.removeToken();
     const authToken = await localStorage.getItem("auth_token");

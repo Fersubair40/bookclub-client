@@ -11,12 +11,13 @@ import {
   Form,
   Button,
   Modal,
-  Alert, 
+  Alert,
 } from "antd";
-import Rate from 'rc-rate';
-import 'rc-rate/assets/index.css';
+import Rate from "rc-rate";
+import "rc-rate/assets/index.css";
 
 import moment from "moment";
+import { DeleteOutlined } from "@ant-design/icons";
 
 import Loading from "../components/Loading";
 
@@ -33,8 +34,9 @@ export default function Book() {
   const [submitting, setSubmitting] = useState(false);
   const [commentsSubmitted, setCommentsSubmitted] = useState(false);
   const [error, setError] = useState("");
-  const [commentsSubmitting, setCommentsSubmitting] = useState(false)
-
+  const [commentsSubmitting, setCommentsSubmitting] = useState(false);
+  const [userId, setUserId] = useState("");
+  const [commentDeleted, setCommentDeleted] = useState(false);
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -47,7 +49,7 @@ export default function Book() {
       const response = await Api.getOneBook(id);
       if (response && response.status === 200) {
         setData(response.data);
-        console.log(typeof(data.average_rating))
+        console.log(typeof data.average_rating);
       }
       const bookComments = await Api.getBooksComment(id);
       if (bookComments && bookComments.status === 200) {
@@ -55,6 +57,7 @@ export default function Book() {
       }
       const isSignedIn = await Api.isSignedIn();
       if (isSignedIn && isSignedIn.status === 200) {
+        setUserId(isSignedIn.data.user_id);
         setIsSigned(true);
       } else if (isSignedIn && isSignedIn.status === 401) {
         await Api.logOut();
@@ -65,7 +68,7 @@ export default function Book() {
 
       setLoading(false);
     })();
-  }, [isSigned, commentsSubmitted, commentsSubmitting]);
+  }, [isSigned, commentsSubmitted, commentsSubmitting, commentDeleted]);
 
   const toggle = () => setModal(!modal);
 
@@ -104,6 +107,31 @@ export default function Book() {
     setCommentsSubmitting(false);
   };
 
+  const renderDelete = (commentUserId, currentUser, commentId) => {
+    if (commentUserId === currentUser) {
+      return (
+        <div className="delete">
+          <DeleteOutlined
+            className="delete-button"
+            onClick={() => {
+              deleteUserComment(commentId)
+            }}
+          />
+        </div>
+      );
+    }
+  };
+
+  const deleteUserComment = async (commentId) => {
+    setCommentDeleted(true)
+    const response = await Api.deleteComment(commentId);
+    if (response && response.status === 204) {
+      setCommentDeleted(false);
+    } else if (response && response.status === 401) {
+      setIsSigned(false);
+    }
+  };
+
   return (
     <Layout>
       <>
@@ -119,12 +147,14 @@ export default function Book() {
               />
             </div>
             <div className="rate">
-              <h4>Average Rating: <span>  { data.average_rating } </span> </h4>
-              
-              <Rate 
-              className='rating'
-              disabled={true}
-              value={data.average_rating}
+              <h4>
+                Average Rating: <span> {data.average_rating} </span>{" "}
+              </h4>
+
+              <Rate
+                className="rating"
+                disabled={true}
+                value={data.average_rating}
               />
             </div>
           </Col>
@@ -149,28 +179,45 @@ export default function Book() {
                     Number of comments: {comments.length}{" "}
                   </h4>
                   {comments &&
-                    comments.map((comment, index) => (
-                      <Comment
-                        key={comment.id}
-                        author={comment.user.username}
-                        content={<p className="details"> {comment.comment} </p>}
-                        avatar={
-                          <Avatar
-                            src={`https://ui-avatars.com/api/?background=random&name=${comment.user.username}`}
-                            alt={comment.user.username}
+                    comments.map((comment, index) => {
+                      return (
+                        <>
+                          <Comment
+                            key={comment.id}
+                            author={comment.user.username}
+                            content={
+                              <p className="details"> {comment.comment} </p>
+                            }
+                            avatar={
+                              <>
+                                <Avatar
+                                  src={`https://ui-avatars.com/api/?background=random&name=${comment.user.username}`}
+                                  alt={comment.user.username}
+                                />
+                              </>
+                            }
+                            datetime={
+                              <>
+                                <Tooltip
+                                  title={moment(comment.created_at).format(
+                                    "YYYY-MM-DD HH:mm:ss"
+                                  )}
+                                >
+                                  <span>
+                                    {moment(comment.created_at).fromNow()}
+                                  </span>
+                                </Tooltip>
+                                {renderDelete(
+                                  comment.user_id,
+                                  userId,
+                                  comment.id
+                                )}
+                              </>
+                            }
                           />
-                        }
-                        datetime={
-                          <Tooltip
-                            title={moment(comment.created_at).format(
-                              "YYYY-MM-DD HH:mm:ss"
-                            )}
-                          >
-                            <span>{moment(comment.created_at).fromNow()}</span>
-                          </Tooltip>
-                        }
-                      />
-                    ))}
+                        </>
+                      );
+                    })}
 
                   {isSigned ? (
                     <>
@@ -189,6 +236,7 @@ export default function Book() {
                           loading={commentsSubmitting}
                           onClick={addComment}
                           type="primary"
+                          className="comment-btn"
                         >
                           Add Comment
                         </Button>
@@ -228,6 +276,7 @@ export default function Book() {
               key="submit"
               type="primary"
               loading={submitting}
+              className="login"
               onClick={() => {
                 login();
               }}
