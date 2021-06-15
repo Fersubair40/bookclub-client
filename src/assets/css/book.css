@@ -1,0 +1,110 @@
+.details {
+    margin-bottom: 1rem;
+    color: #7a7a7a;
+    font-weight: normal;
+}
+
+.rate {
+    margin-top: 4rem !important;
+}
+.rating{
+    font-size: 28px;
+}
+.login-button{
+    background-color: #613f75;
+    color: #fff;
+    padding: .5rem;
+    width: 15rem;
+    margin: 1rem auto;
+    box-shadow: 0 12px 24px hsla(var(--hue-color), 61%, 16%, 0.10);
+    border: 0;
+    border-radius: 1rem;
+}
+
+.login-input{
+    display: flex;
+    justify-content: center;
+    padding: .5rem;
+    margin: 1rem auto;
+    border: .1rem solid  #613f75;
+    border-radius: .2rem;
+    width: 15rem;
+}
+
+.input{
+    height: 100px;
+    margin-top: 20px;
+}
+
+.modal{
+
+    /* height: 500px !important; */
+    width: 350px !important;
+}
+
+.login-button:hover {
+    box-shadow: 0 16px 24px hsla(var(--hue-color), 61%, 16%, 0.25);
+  }
+
+.single-book[data-sizing="intrinsic"] {
+    width: max-content;
+    height: max-content;
+}
+
+.text {
+    padding: 2rem;
+}
+
+
+.book-card {
+    background-color: #fff;
+    box-shadow: 0 12px 24px hsla(var(--hue-color), 61%, 16%, 0.10);
+    transition: all .2s;
+    align-items: center;
+
+}
+
+.book-card[data-sizing="intrinsic"] {
+    width: max-content;
+    height: max-content;
+}
+
+.book-card:hover {
+    box-shadow: 0 16px 24px hsla(var(--hue-color), 61%, 16%, 0.25);
+}
+
+.single-book {
+    box-shadow: 0 19px 24px hsla(212, 59%, 14%, 0.65);
+}
+
+.img {
+    width: 100%;
+    pointer-events: none;
+}
+
+.comment {
+    padding: 2rem;
+}
+
+
+@media screen and (min-width: 1400px) {
+    .section-book {
+        margin-left: 6rem;
+        margin-right: 3rem;
+
+    }
+
+    .description {
+        margin-top: 6rem
+    }
+
+    .section-book {
+        margin-top: 6rem;
+    }
+}
+
+/* @media screen and (max-width: 450px) {
+    .section {
+        margin: 6rem auto;
+    }
+} */
