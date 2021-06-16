@@ -21,7 +21,7 @@ const Api = {
       ? true
       : false;
   },
-  authenticate: async (data) => {
+  authenticate: async(data) => {
     try {
       const response = await axios.post("/authenticate", JSON.stringify(data));
       if (response && response.status === 200) {
@@ -66,7 +66,7 @@ const Api = {
     await Api.setAuthToken();
     try {
       const response = await axios.post("/comments", JSON.stringify(data));
-      if (response && response.status === 200) {
+      if (response && response.status === 201) {
         return response;
       }
     } catch (error) {
@@ -84,12 +84,34 @@ const Api = {
       return error;
     }
   },
-  deleteComment: async (commentId) =>{
+  deleteComment: async (commentId) => {
     await Api.setAuthToken();
     try {
-      const response = await axios.delete(`/comments/${commentId}`)
+      const response = await axios.delete(`/comments/${commentId}`);
       if (response && response.status === 204) {
-        return response
+        return response;
+      }
+    } catch (error) {
+      return error;
+    }
+  },
+  getUserRating: async (bookId) => {
+    await Api.setAuthToken();
+    try {
+      const response = await axios.get(`/user-rating/${bookId}`);
+      if (response && response.status === 200) {
+        return response;
+      }
+    } catch (error) {
+      return error;
+    }
+  },
+  rateBook: async(data) => {
+    await Api.setAuthToken();
+    try {
+      const response = await axios.post("/ratings", JSON.stringify(data));
+      if (response && response.status === 201) {
+        return response;
       }
     } catch (error) {
       return error;

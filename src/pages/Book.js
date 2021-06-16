@@ -32,11 +32,12 @@ export default function Book() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
-  const [commentsSubmitted, setCommentsSubmitted] = useState(false);
   const [error, setError] = useState("");
   const [commentsSubmitting, setCommentsSubmitting] = useState(false);
   const [userId, setUserId] = useState("");
   const [commentDeleted, setCommentDeleted] = useState(false);
+  const [ratingData, setRatingData] = useState([]);
+  const [rateBook, setRateBook] = useState(false);
 
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -49,7 +50,6 @@ export default function Book() {
       const response = await Api.getOneBook(id);
       if (response && response.status === 200) {
         setData(response.data);
-        console.log(typeof data.average_rating);
       }
       const bookComments = await Api.getBooksComment(id);
       if (bookComments && bookComments.status === 200) {
@@ -63,12 +63,20 @@ export default function Book() {
         await Api.logOut();
         setIsSigned(false);
       }
+
+      const userRating = await Api.getUserRating(id);
+      if (userRating && userRating.status === 200) {
+        setRatingData(userRating.data);
+      } else if (userRating && userRating.status === 401) {
+        setIsSigned(false);
+      }
+
       //   const isLoggedIn = await Api.isLoggedIn();
       //   setIsSigned(isLoggedIn);
 
       setLoading(false);
     })();
-  }, [isSigned, commentsSubmitted, commentsSubmitting, commentDeleted]);
+  }, [isSigned, commentsSubmitting, commentDeleted, rateBook]);
 
   const toggle = () => setModal(!modal);
 
@@ -100,11 +108,27 @@ export default function Book() {
     setCommentsSubmitting(true);
     const res = await Api.addComment(data);
     if (res && res.status === 201) {
-      setCommentsSubmitted(true);
+      return "comment submitted";
     } else if (res && res.status === 401) {
       setIsSigned(false);
     }
     setCommentsSubmitting(false);
+  };
+
+  const addRate = async (value) => {
+    const data = {
+      rating: {
+        rating: value,
+        book_id: id,
+      },
+    };
+    setRateBook(true);
+    const response = await Api.rateBook(data);
+    if (response && response.status === 201) {
+      setRateBook(false);
+    } else if (response && response.status === 401) {
+      setIsSigned(false);
+    }
   };
 
   const renderDelete = (commentUserId, currentUser, commentId) => {
@@ -112,9 +136,10 @@ export default function Book() {
       return (
         <div className="delete">
           <DeleteOutlined
+            key={commentId}
             className="delete-button"
             onClick={() => {
-              deleteUserComment(commentId)
+              deleteUserComment(commentId);
             }}
           />
         </div>
@@ -123,7 +148,7 @@ export default function Book() {
   };
 
   const deleteUserComment = async (commentId) => {
-    setCommentDeleted(true)
+    setCommentDeleted(true);
     const response = await Api.deleteComment(commentId);
     if (response && response.status === 204) {
       setCommentDeleted(false);
@@ -143,7 +168,7 @@ export default function Book() {
                 className="img"
                 alt={data.title}
                 src={data.book_image}
-                onContextMenu="return false;"
+                // onContextMenu="return false;"
               />
             </div>
             <div className="rate">
@@ -172,6 +197,28 @@ export default function Book() {
                     Buy Book <a href={data.book_link}> Amazon </a>{" "}
                   </h3>
                 </div>
+                {isSigned && (
+                  <>
+                    {ratingData && ratingData.length > 0 ? (
+                      <>
+                        <p className="text details"> You've rated this book </p>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text">
+                          <p className="details"> Rate this book </p>
+                          <Rate
+                            className="rating"
+                            onChange={(value) => {
+                              addRate(value);
+                            }}
+                          />
+                        </div>
+                      </>
+                    )}
+                  </>
+                )}
+
                 <hr className="details"></hr>
                 <div className="comment">
                   <h3 className="details">Comments</h3>
@@ -234,7 +281,9 @@ export default function Book() {
                         <Button
                           type="submit"
                           loading={commentsSubmitting}
-                          onClick={addComment}
+                          onClick={() => {
+                            addComment();
+                          }}
                           type="primary"
                           className="comment-btn"
                         >
@@ -301,14 +350,6 @@ export default function Book() {
                 {
                   required: true,
                   message: "username is required",
-                },
-                {
-                  validator: (_, value) => {
-                    if (value || value.includes["null"]) {
-                      return Promise.reject(new Error("Nice try!"));
-                    }
-                    return Promise.resolve();
-                  },
                 },
               ]}
             />

@@ -39,7 +39,7 @@ export default function Home({ history }) {
           {data.map((book, index) => (
             <div className="card" key={book.id}>
               <Link to={`/book/?id=${book.id}`}>
-                <img className="img-responsive" src={book.book_image} alt="" />
+                <img className="img-responsive" src={book.book_image} alt={book.title} />
               </Link>
 
               <div className="book__title">
