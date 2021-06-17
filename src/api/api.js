@@ -21,11 +21,21 @@ const Api = {
       ? true
       : false;
   },
-  authenticate: async(data) => {
+  authenticate: async (data) => {
     try {
       const response = await axios.post("/authenticate", JSON.stringify(data));
       if (response && response.status === 200) {
         await Api.setToken(response.data.token);
+        return response;
+      }
+    } catch (error) {
+      return error;
+    }
+  },
+  register: async (data) => {
+    try {
+      const response = await axios.post("/users", data);
+      if (response && response.status === 201) {
         return response;
       }
     } catch (error) {
@@ -106,7 +116,7 @@ const Api = {
       return error;
     }
   },
-  rateBook: async(data) => {
+  rateBook: async (data) => {
     await Api.setAuthToken();
     try {
       const response = await axios.post("/ratings", JSON.stringify(data));

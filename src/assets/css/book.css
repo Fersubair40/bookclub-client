@@ -33,11 +33,21 @@
 .login-input{
     display: flex;
     justify-content: center;
-    padding: .5rem;
-    margin: 1rem auto;
+    padding: .4rem;
+    margin: .6rem auto ;
     border: .1rem solid  #613f75;
     border-radius: .2rem;
     width: 15rem;
+}
+
+.register-link{
+    text-decoration: none;
+    margin-right: 1rem;
+    color: #613f75;
+}
+
+.register-link:hover{
+    color: #613f75;
 }
 
 .comment-btn{
@@ -58,8 +68,8 @@
 }
 
 .input{
-    height: 100px;
-    margin-top: 20px;
+    height: 170px;
+    margin-top: 5px;
 }
 
 .modal{

@@ -8,6 +8,7 @@ import "./assets/css/loading.css";
 import "./assets/css/custom.css";
 import "./assets/css/home.css";
 import "./assets/css/book.css";
+import './assets/css/register.css'
 
 ReactDOM.render(
   <React.StrictMode>

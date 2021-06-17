@@ -4,6 +4,7 @@ import Book from "./pages/Book";
 import Fiction from "./pages/Fiction";
 
 import Home from "./pages/Home";
+import Register from "./pages/Register";
 
 const Routes = () => {
   return (
@@ -11,6 +12,7 @@ const Routes = () => {
       <Switch>
         <Route path="/home" component={Home} />
         <Route path="/category/fiction" component={Fiction} />
+        <Route path="/auth/register" component={Register} />
         <Route path="/book" component={Book} />
         <Redirect from='/' to="/home" />
         {/* <Route path="/auth/register" component={Register} />

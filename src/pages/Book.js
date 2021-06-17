@@ -12,9 +12,12 @@ import {
   Button,
   Modal,
   Alert,
+  message,
 } from "antd";
 import Rate from "rc-rate";
 import "rc-rate/assets/index.css";
+
+import { Link } from "react-router-dom";
 
 import moment from "moment";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -70,15 +73,15 @@ export default function Book() {
       } else if (userRating && userRating.status === 401) {
         setIsSigned(false);
       }
-
-      //   const isLoggedIn = await Api.isLoggedIn();
-      //   setIsSigned(isLoggedIn);
-
       setLoading(false);
     })();
   }, [isSigned, commentsSubmitting, commentDeleted, rateBook]);
 
   const toggle = () => setModal(!modal);
+
+  const success = () => {
+    message.success("Login success");
+  };
 
   const login = async () => {
     const data = {
@@ -90,8 +93,11 @@ export default function Book() {
     setSubmitting(true);
     const response = await Api.authenticate(data);
     if (response && response.status === 200) {
+      success();
       setIsSigned(true);
       setModal(false);
+    } else if (response && response.status === 404) {
+      setError("Invalid credentials or Not authorized");
     } else {
       setError(response.data.message);
     }
@@ -108,6 +114,7 @@ export default function Book() {
     setCommentsSubmitting(true);
     const res = await Api.addComment(data);
     if (res && res.status === 201) {
+      setCommentsSubmitting(false)
       return "comment submitted";
     } else if (res && res.status === 401) {
       setIsSigned(false);
@@ -321,6 +328,7 @@ export default function Book() {
           //   onOk={() => toggle()}
           onCancel={() => toggle()}
           footer={[
+            <Link className="register-link" to="/auth/register"> Don't have account? </Link>,
             <Button
               key="submit"
               type="primary"
@@ -330,8 +338,7 @@ export default function Book() {
                 login();
               }}
             >
-              {" "}
-              Login{" "}
+              Login
             </Button>,
           ]}
         >
@@ -339,28 +346,38 @@ export default function Book() {
             <Alert className="mb" message={error} type="error" showIcon />
           )}
           <div className="input">
-            <Input
-              className="login-input"
-              placeholder="username"
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
-              rules={[
-                {
-                  required: true,
-                  message: "username is required",
-                },
-              ]}
-            />
-            <Input.Password
-              className="login-input"
-              placeholder="input password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
+            <Form>
+              <Form.Item
+                name="username"
+                rules={[
+                  { required: true, message: "Please input your username!" },
+                ]}
+              >
+                <Input
+                  className="login-input"
+                  placeholder="username"
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                />
+              </Form.Item>
+              <Form.Item
+                name="password"
+                rules={[
+                  { required: true, message: "Please input your password!" },
+                ]}
+              >
+                <Input.Password
+                  className="login-input"
+                  placeholder="input password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+              </Form.Item>
+            </Form>
           </div>
         </Modal>
       </>
