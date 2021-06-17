@@ -115,6 +115,7 @@ export default function Book() {
     const res = await Api.addComment(data);
     if (res && res.status === 201) {
       setCommentsSubmitting(false)
+      setPost("")
       return "comment submitted";
     } else if (res && res.status === 401) {
       setIsSigned(false);
@@ -195,7 +196,7 @@ export default function Book() {
               <div className="book-card">
                 <div className="text">
                   <h1 className="details"> Title: {data.title} </h1>
-                  <h2 className="details"> Author: {data.author} </h2>
+                  <h3 className="details"> Author: {data.author} </h3>
                   <h3 className="details"> Description: {data.description} </h3>
                   <h3 className="details"> Isbn10: {data.primary_isbn10} </h3>
                   <h3 className="details"> Isbn13: {data.primary_isbn13} </h3>

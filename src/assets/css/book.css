@@ -1,7 +1,7 @@
 .details {
     margin-bottom: 1rem;
     color: #7a7a7a;
-    font-weight: normal;
+    font-weight: lighter;
 }
 
 .rate {
@@ -51,10 +51,15 @@
 }
 
 .comment-btn{
-    background-color: #613f75;
+    background-color: #613f75 !important;
     padding: .5rem .9rem 2rem;
     align-items: center;
     border-radius: 1.5rem;
+    border: 0;
+}
+
+.comment-btn:hover{
+    background-color: #613f75 !important;
 }
 
 .login{
@@ -93,8 +98,8 @@
 
 
 .book-card {
-    background-color: #fff;
-    box-shadow: 0 12px 24px hsla(var(--hue-color), 61%, 16%, 0.10);
+    background-color:#fff;
+    box-shadow: 0 10px 4px hsla(250, 61%, 16%, 0.10);
     transition: all .2s;
     align-items: center;
 
