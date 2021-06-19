@@ -40,9 +40,9 @@ export default function Register({ history }) {
           <Col xs={24} lg={7} className="form">
             <Col>
               <div>
-                <h1 className="text">Welcome Back!</h1>
+                <h1 className="text">Welcome to bookclub!</h1>
                 <h2 className="text">
-                  Fill in your login credentials to pick up where you left off
+                 Register to get started!
                 </h2>
               </div>
             </Col>
