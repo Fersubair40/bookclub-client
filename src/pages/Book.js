@@ -231,7 +231,7 @@ export default function Book() {
                 <div className="comment">
                   <h3 className="details">Comments</h3>
                   <h4 className="details">
-                    Number of comments: {comments.length}{" "}
+                    Number of replies: {comments.length}{" "}
                   </h4>
                   {comments &&
                     comments.map((comment, index) => {
@@ -254,6 +254,7 @@ export default function Book() {
                             datetime={
                               <>
                                 <Tooltip
+                                className="tooltip"
                                   title={moment(comment.created_at).format(
                                     "YYYY-MM-DD HH:mm:ss"
                                   )}
