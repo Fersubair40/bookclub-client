@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BASE_URL } from "../config/index";
 
-axios.defaults.baseURL = `${BASE_URL}`;
+axios.defaults.baseURL = `${BASE_URL}/api/v1`;
 axios.defaults.headers.post["Content-Type"] = "application/json";
 axios.defaults.headers["Content-Type"] = "application/json";
 
