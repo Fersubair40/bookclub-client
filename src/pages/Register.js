@@ -71,7 +71,7 @@ export default function Register({ history }) {
                 if (!values.email) {
                   errors.email = "email is required";
                 }
-                if (["admin", "null", "god"].includes(values.username)) {
+                if (["admin", "null", "god"].includes(values.username.toLowerCase())) {
                   errors.username = "Nice try";
                 }
                 setValidationErrors({ ...errors });
