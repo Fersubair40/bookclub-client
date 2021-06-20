@@ -21,6 +21,11 @@
     border-radius: 1rem;
 }
 
+.loader{
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
 .delete{
     display: inline;
     color: red;

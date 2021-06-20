@@ -114,8 +114,8 @@ export default function Book() {
     setCommentsSubmitting(true);
     const res = await Api.addComment(data);
     if (res && res.status === 201) {
-      setCommentsSubmitting(false)
-      setPost("")
+      setCommentsSubmitting(false);
+      setPost("");
       return "comment submitted";
     } else if (res && res.status === 401) {
       setIsSigned(false);
@@ -168,7 +168,11 @@ export default function Book() {
   return (
     <Layout>
       <>
-        {loading && <Loading />}
+        {loading && (
+          <div className="loader">
+            <Loading />
+          </div>
+        )}
         <Row gutter={[48, 16]}>
           <Col lg={6} className="section-book">
             <div className="single-book">
@@ -254,7 +258,7 @@ export default function Book() {
                             datetime={
                               <>
                                 <Tooltip
-                                className="tooltip"
+                                  className="tooltip"
                                   title={moment(comment.created_at).format(
                                     "YYYY-MM-DD HH:mm:ss"
                                   )}
@@ -330,7 +334,10 @@ export default function Book() {
           //   onOk={() => toggle()}
           onCancel={() => toggle()}
           footer={[
-            <Link className="register-link" to="/auth/register"> Don't have account? </Link>,
+            <Link className="register-link" to="/auth/register">
+              {" "}
+              Don't have account?{" "}
+            </Link>,
             <Button
               key="submit"
               type="primary"
